@@ -1,0 +1,52 @@
+{
+  "variables": {
+    "version": "",
+	"aws_access_key": "{{ vault `aws/access_key` `ampuops`}}",
+	"aws_secret_key": "{{ vault `aws/secret_key` `ampuops`}}",
+	"appkey": "{{ vault `snipeit/app` `appkey`}}",
+	"mysqlpassword": "{{ vault `snipeit/mysql` `dbkey`}}"
+  },
+  "provisioners": [
+     {
+	  "type": "shell",
+	  "script": "./scripts/ansible.sh"
+     },
+	{
+	  "type": "file",
+	  "source": "./files/site.conf",
+	  "destination": "/home/ubuntu/site.conf"
+	},
+	{
+      "type": "file",
+      "source": "./files/.env",
+      "destination": "/home/ubuntu/.env"
+	},
+	{
+     "type": "file",
+     "source": "./files/snipeit.zip",
+     "destination": "/home/ubuntu/snipeit.zip"
+	},
+	{
+    "type": "file",
+    "source": "keys/",
+    "destination": "~/.ssh"
+    },
+    {
+      "type": "ansible-local",
+      "playbook_file": "jugadas/snipeitwebaws.yml",
+	  "extra_arguments": [ "--extra-vars \"appkey={{user `appkey`}} mysqlpassword={{user `mysqlpassword`}}\"" ]
+    }
+  ],
+  "builders": [
+  {
+  "type": "amazon-ebs",
+  "access_key": "{{user `aws_access_key`}}",
+  "secret_key": "{{user `aws_secret_key`}}",
+  "region": "eu-central-1",
+  "source_ami": "ami-0b6f46ba4d94838a0",
+  "instance_type": "t2.micro",
+  "ssh_username": "ubuntu",
+  "ami_name": "web-php-snipeit {{timestamp}}"
+  }
+  ]
+}

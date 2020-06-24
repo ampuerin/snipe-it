@@ -1,0 +1,158 @@
+---
+# Ansible playbook for installing frontend of Snipe-IT on AWS EC2
+- name: "snipeitweb"
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: Prepare git keys
+    shell: |
+      chmod 0600 ~/.ssh/*github*
+      eval `ssh-agent`
+      ssh-add ~/.ssh/github
+      ssh-keyscan github.com >> ~/.ssh/known_hosts
+    become: no
+    become_user: ubuntu
+
+  - name: Install git
+    apt:
+      name: git
+      state: present
+    
+  - name: Clone Snipe-IT private repository
+    git:
+      repo: git@github.com:ampuerin/snipe-it.git
+      dest: ~/snipeit
+      version: master
+      accept_hostkey: yes
+    become: no
+    become_user: ubuntu
+
+  - name: Setup environment for snipe-it
+    copy:
+      src: ~/.env
+      dest: ~/snipeit/.env
+      mode: u+rw
+    become: no
+    become_user: ubuntu
+  
+  - name: Install zip
+    apt:
+      name: zip 
+      state: present
+
+  - name: Install composer
+    apt:
+      name: composer
+      state: present
+   
+  - name: Install PHP Extensions
+    apt:
+      name:
+        - php7.2-fpm
+        - php7.2-common
+        - php7.2-gmp
+        - php7.2-intl
+        - php7.2-xmlrpc
+        - php7.2-cli
+        - php7.2-gd
+        - php7.2-mbstring
+        - php7.2-tokenizer
+        - php7.2-curl
+        - php7.2-mysql
+        - php7.2-ldap
+        - php7.2-zip
+        - php7.2-fileinfo
+        - php7.2-bcmath
+        - php7.2-xml
+      state: present
+
+  - name: Install php modules and deps with composer
+    composer:
+      command: install
+      working_dir: ~/snipeit
+    become: no
+    become_user: ubuntu    
+
+  - name: Install mysql-server
+    apt:
+      name: mysql-server    
+      state: present
+
+  - name: Install nginx
+    apt:
+      name: nginx
+      state: present
+
+  - name: Add the user 'ubuntu' to group of 'www-data'
+    user:
+      name: ubuntu
+      group: www-data
+
+  - name: Setup nginx vhost
+    copy:
+      src: ~/site.conf
+      dest: /etc/nginx/sites-available/default
+      mode: u+rw
+    
+  - name: Create a symbolic link into sites availables
+    file:
+      src: /etc/nginx/sites-available/default
+      dest: /etc/nginx/sites-enabled/default
+      state: link
+
+  - name: Move directory to /var/www
+    command: mv /home/ubuntu/snipeit /var/www/snipeit
+    args:
+      creates: /var/www/snipeit/.env
+    register: fresh
+
+  - name: Write appkey on .env app file
+    lineinfile:
+      path: /var/www/snipeit/.env
+      regexp: '^APP_KEY=ChangeMe'
+      line: APP_KEY=base64:{{ appkey }}
+    when: fresh.changed
+
+  - name: Write mysqlpassword on .env app file
+    lineinfile:
+      path: /var/www/snipeit/.env
+      regexp: '^DB_PASSWORD=ChangeMe'
+      line: DB_PASSWORD={{ mysqlpassword }}
+    when: fresh.changed
+
+  - name: Extract snipeit.zip backup
+    unarchive:
+      src: /home/ubuntu/snipeit.zip
+      dest: /
+
+  - name: Change owner of snipe-it web directory
+    file:
+      path: /var/www/snipeit
+      state: directory
+      recurse: yes
+      owner: www-data
+      group: www-data
+    
+  - name: Restart service nginx
+    service:
+      name: nginx
+      state: restarted
+      
+  - name: Change owner of app uploads files
+    file:
+      path: /var/www/snipeit/public/uploads
+      state: directory
+      recurse: yes
+      owner: ubuntu
+         
+  - name: Change owner of app storage files
+    file:
+      path: /var/www/snipeit/storage
+      state: directory
+      recurse: yes
+      owner: ubuntu
+
+  - name: Show passwords
+    debug:
+      msg: "Your app decrypt key is base64:{{ appkey }} and db_passwd is {{ mysqlpassword }}"

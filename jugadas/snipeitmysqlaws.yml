@@ -1,0 +1,62 @@
+---
+# Ansible playbook for installing mysqldb of Snipe-IT on AWS EC2
+- name: "snipeitdb"
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: Install zip
+    apt:
+      name: zip 
+      state: present
+ 
+  - name: Install mysql-server
+    apt:
+      name: mysql-server    
+      state: present
+  
+  - name: Install python-mysqldb
+    apt:
+      package: python-mysqldb
+      state: present 
+
+  - name: Create mysql database and config
+    mysql_db: 
+      name: snipeit 
+      state: present
+    register: fresh
+
+  - name: Create mysql user
+    mysql_user:
+      name: snipe_user
+      password: "{{ mysqlpassword }}"
+      priv: 'snipeit.*:ALL'
+      host: '%'
+      state: present
+
+  - name: Extract snipeit.zip backup
+    unarchive:
+      src: /home/ubuntu/snipeit.zip
+      dest: /
+
+  - name: Restore mysql database
+    mysql_db:
+      name: snipeit
+      state: import
+      target: /db-dumps/mysql-snipeit.sql
+      
+  - name: Comment config for allow remote connections
+    lineinfile:
+      path: /etc/mysql/mysql.conf.d/mysqld.cnf
+      regexp: '127\.0\.0\.1'
+      line: bind-address = 0.0.0.0
+    when: fresh.changed
+
+  - name: Restart service mysql
+    service:
+      name: mysql
+      state: restarted
+
+  - name: Show mysql_db password
+    debug:
+      msg: "Your db password is {{ mysqlpassword }}"
