@@ -21,7 +21,7 @@
     },
 	{
 	  "type": "file",
-	  "source": ".",
+	  "source": "./",
 	  "destination": "/home/ubuntu/snipeit/"
 	},
     {

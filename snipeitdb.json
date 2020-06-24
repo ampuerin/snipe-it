@@ -13,16 +13,9 @@
             "sleep 30",
             "apt-add-repository ppa:ansible/ansible -y",
             "/usr/bin/apt-get update",
-            "/usr/bin/apt-get -y install ansible",
-            "mkdir /home/ubuntu/snipeit",
-            "chown ubuntu:ubuntu /home/ubuntu/snipeit"
+            "/usr/bin/apt-get -y install ansible"
         ]
     },
-	{
-	  "type": "file",
-	  "source": ".",
-	  "destination": "/home/ubuntu/snipeit/"
-	},
     {
       "type": "ansible-local",
       "playbook_file": "jugadas/snipeitmysqlaws.yml",
