@@ -9,7 +9,17 @@
     apt:
       name: zip 
       state: present
- 
+      
+  - name: Install aws cli
+    apt:
+      name: awscli 
+      state: present
+
+  - name: Get backup from S3
+    command: aws s3 cp s3://terraform-jenkins-dev/snipeit/snipeit.zip /home/ubuntu/snipeit.zip
+    args:
+      creates: /home/ubuntu/snipeit.zip 
+      
   - name: Install mysql-server
     apt:
       name: mysql-server    

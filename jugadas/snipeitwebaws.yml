@@ -16,9 +16,9 @@
       state: present
 
   - name: Get backup from S3
-    command: aws s3 cp s3://terraform-jenkins-dev/snipeit/snipeit.zip /home/ubuntu/snipeit/snipeit.zip
+    command: aws s3 cp s3://terraform-jenkins-dev/snipeit/snipeit.zip /home/ubuntu/snipeit.zip
     args:
-      creates: /home/ubuntu/snipeit/snipeit.zip
+      creates: /home/ubuntu/snipeit.zip
 
   - name: Install composer
     apt:
@@ -110,7 +110,7 @@
 
   - name: Extract snipeit.zip backup
     unarchive:
-      src: /home/ubuntu/snipeit/snipeit.zip
+      src: /home/ubuntu/snipeit.zip
       dest: /
 
   - name: Change owner of snipe-it web directory
