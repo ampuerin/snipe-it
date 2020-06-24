@@ -23,7 +23,6 @@ pipeline {
 				sh 'packer build snipeitdb.json'
 			}
 		}
-		}
 		stage('Despliegue en AWS con Terraform') {
 			steps {			
 				sh '''
