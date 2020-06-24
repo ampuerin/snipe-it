@@ -5,37 +5,6 @@
   become: yes
 
   tasks:
-  - name: Prepare git keys
-    shell: |
-      chmod 0600 ~/.ssh/*github*
-      eval `ssh-agent`
-      ssh-add ~/.ssh/github
-      ssh-keyscan github.com >> ~/.ssh/known_hosts
-    become: no
-    become_user: ubuntu
-
-  - name: Install git
-    apt:
-      name: git
-      state: present
-    
-  - name: Clone Snipe-IT private repository
-    git:
-      repo: git@github.com:ampuerin/snipe-it.git
-      dest: ~/snipeit
-      version: master
-      accept_hostkey: yes
-    become: no
-    become_user: ubuntu
-
-  - name: Setup environment for snipe-it
-    copy:
-      src: ~/.env
-      dest: ~/snipeit/.env
-      mode: u+rw
-    become: no
-    become_user: ubuntu
-  
   - name: Install zip
     apt:
       name: zip 
@@ -91,7 +60,7 @@
 
   - name: Setup nginx vhost
     copy:
-      src: ~/site.conf
+      src: ~/snipeit/files/site.conf
       dest: /etc/nginx/sites-available/default
       mode: u+rw
     
@@ -123,7 +92,7 @@
 
   - name: Extract snipeit.zip backup
     unarchive:
-      src: /home/ubuntu/snipeit.zip
+      src: /home/ubuntu/snipeit/files/snipeit.zip
       dest: /
 
   - name: Change owner of snipe-it web directory

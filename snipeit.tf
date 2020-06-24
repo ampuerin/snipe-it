@@ -105,7 +105,7 @@ resource "aws_instance" "snipeit-web-node" {
     host		= "${aws_instance.snipeit-web-node.public_dns}"
     type        = "ssh"
     user        = "ubuntu"
-    private_key = "${file("../../aws-kkfile/ampuops.pem")}"
+    private_key = "${file("/home/ubuntu/keys/ampuops.pem")}"
   }
  }
 }

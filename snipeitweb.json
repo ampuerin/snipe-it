@@ -13,24 +13,9 @@
      },
 	{
 	  "type": "file",
-	  "source": "./files/site.conf",
-	  "destination": "/home/ubuntu/site.conf"
+	  "source": ".",
+	  "destination": "/home/ubuntu/snipeit"
 	},
-	{
-      "type": "file",
-      "source": "./files/.env",
-      "destination": "/home/ubuntu/.env"
-	},
-	{
-     "type": "file",
-     "source": "./files/snipeit.zip",
-     "destination": "/home/ubuntu/snipeit.zip"
-	},
-	{
-    "type": "file",
-    "source": "keys/",
-    "destination": "~/.ssh"
-    },
     {
       "type": "ansible-local",
       "playbook_file": "jugadas/snipeitwebaws.yml",
