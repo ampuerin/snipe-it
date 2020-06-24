@@ -72,7 +72,7 @@
       
   - name: Setup environment for snipe-it
     copy:
-      src: ~/files/.env
+      src: ~/snipeit/files/.env
       dest: ~/snipeit/.env
       mode: u+rw
     become: no
