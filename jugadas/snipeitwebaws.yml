@@ -69,7 +69,15 @@
       src: /etc/nginx/sites-available/default
       dest: /etc/nginx/sites-enabled/default
       state: link
-
+      
+  - name: Setup environment for snipe-it
+    copy:
+      src: ~/files/.env
+      dest: ~/snipeit/.env
+      mode: u+rw
+    become: no
+    become_user: ubuntu
+    
   - name: Move directory to /var/www
     command: mv /home/ubuntu/snipeit /var/www/snipeit
     args:

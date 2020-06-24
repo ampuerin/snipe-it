@@ -21,7 +21,7 @@
     },
 	{
 	  "type": "file",
-	  "source": "/var/lib/jenkins/workspace/snipeit/",
+	  "source": "./",
 	  "destination": "/home/ubuntu/snipeit"
 	},
     {
