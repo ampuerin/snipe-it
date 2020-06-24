@@ -21,8 +21,8 @@
     },
 	{
 	  "type": "file",
-	  "source": "./",
-	  "destination": "/home/ubuntu/snipeit/"
+	  "source": "/var/lib/jenkins/workspace/snipeit/",
+	  "destination": "/home/ubuntu/snipeit"
 	},
     {
       "type": "ansible-local",
