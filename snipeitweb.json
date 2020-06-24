@@ -22,7 +22,7 @@
 	{
 	  "type": "file",
 	  "source": ".",
-	  "destination": "/home/ubuntu/snipeit"
+	  "destination": "/home/ubuntu/snipeit/"
 	},
     {
       "type": "ansible-local",

@@ -20,8 +20,8 @@
     },
 	{
 	  "type": "file",
-	  "source": "./files/snipeit.zip",
-	  "destination": "/home/ubuntu/snipeit.zip"
+	  "source": ".",
+	  "destination": "/home/ubuntu/snipeit/"
 	},
     {
       "type": "ansible-local",
