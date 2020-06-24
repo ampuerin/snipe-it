@@ -10,6 +10,18 @@
       name: zip 
       state: present
 
+  - name: Install aws cli
+    apt:
+      name: awscli 
+      state: present
+
+  - name: Get backup from S3
+    aws_s3:
+      bucket: terraform-jenkins-dev
+      object: snipeit/snipeit.zip
+      dest: /home/ubuntu/snipeit/files/snipeit.zip
+      mode: get
+
   - name: Install composer
     apt:
       name: composer
