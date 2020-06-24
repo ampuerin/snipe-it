@@ -7,13 +7,6 @@ pipeline {
     stages {
         stage("read vault key") {
             steps {
-				withCredentials([
-				[
-				$class: 'VaultTokenCredentialBinding',
-				credentialsId: '2908293b-770d-4346-b436-4f6ec62d524c',
-				vaultAddr: 'http://127.0.0.1:8200'
-				]
-				])
 				{
                 echo "${AWS_KEY}"
 				echo "${AWS_SECRET}"
