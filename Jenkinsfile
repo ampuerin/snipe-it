@@ -1,14 +1,9 @@
 pipeline {
     agent any
-    environment {
-        AWS_KEY = vault path: 'aws/access_key', key: 'ampuops'
-		AWS_SECRET = vault path: 'aws/secret_key', key: 'ampuops'
-    }
     stages {
-        stage("read vault key") {
+        stage("Comienzo") {
             steps {
-                echo "${AWS_KEY}"
-				echo "${AWS_SECRET}"
+                echo "Hola"
 			}	
 		}
 		stage('Crear imagen inmutable del servidor web con Packer') {
@@ -28,7 +23,7 @@ pipeline {
 				sh '''
 					terraform init
 					terraform plan
-					terraform apply -auto-approve -var access_key=${AWS_KEY} -var secret_key=${AWS_SECRET}
+					terraform apply -auto-approve
 				'''
 			}
 		}
