@@ -24,8 +24,8 @@ pipeline {
 			    export aws_secret_key=$(vault kv get -field=ampuops aws/secret_key)
 				export mysqlpassword=$(vault kv get -field=dbkey snipeit/mysql)
 				export appkey=$(vault kv get -field=appkey snipeit/app)
-				packer build snipeitweb.json
-				packer build snipeitdb.json
+				packer build snipeitweb.json -var aws_access_key=$aws_access_key -var aws_secret_key=$aws_secret_key
+				packer build snipeitdb.json -var aws_access_key=$aws_access_key -var aws_secret_key=$aws_secret_key
 				'''
         }
     }
