@@ -120,12 +120,7 @@
       recurse: yes
       owner: www-data
       group: www-data
-    
-  - name: Restart service nginx
-    service:
-      name: nginx
-      state: restarted
-      
+
   - name: Change owner of app uploads files
     file:
       path: /var/www/snipeit/public/uploads
@@ -139,7 +134,12 @@
       state: directory
       recurse: yes
       owner: ubuntu
-
+    
+  - name: Restart service nginx
+    service:
+      name: nginx
+      state: restarted
+      
   - name: Show passwords
     debug:
       msg: "Your app decrypt key is base64:{{ appkey }} and db_passwd is {{ mysqlpassword }}"

@@ -87,6 +87,7 @@ resource "aws_instance" "snipeit-mysql-node" {
   instance_type = "t2.micro"
   security_groups = ["${aws_security_group.mysql-node.name}"]
   key_name = "ampuops"
+  iam_instance_profile = "packer_s3"
   
   tags = {
     Name = "snipeit-mysql"
@@ -98,6 +99,7 @@ resource "aws_instance" "snipeit-web-node" {
   instance_type = "t2.micro"
   security_groups = ["${aws_security_group.web-nodes.name}"]
   key_name = "ampuops"
+  iam_instance_profile = "packer_s3"
   
   tags = {
     Name = "snipeit-php"
