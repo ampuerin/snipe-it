@@ -1,9 +1,6 @@
 {
   "variables": {
-    "version": "",
-	"aws_access_key": "{{ vault `aws/access_key` `ampuops`}}",
-	"aws_secret_key": "{{ vault `aws/secret_key` `ampuops`}}",
-	"mysqlpassword": "{{ vault `snipeit/mysql` `dbkey`}}"
+    "version": ""
   },
   "provisioners": [
      {
