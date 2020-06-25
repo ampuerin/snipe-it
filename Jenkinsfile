@@ -58,6 +58,7 @@ pipeline {
 			   export AWS_SECRET_ACCESS_KEY=$(vault kv get -field=ampuops aws/secret_key)
 			   cat ${aws_ssh_key} > ampuops.pem
 			   terraform init
+			   terraform plan
                terraform apply -auto-approve
             '''
         }      

@@ -110,7 +110,6 @@ resource "aws_instance" "snipeit-web-node" {
   inline = [
    "sed 's/localhost/${aws_instance.snipeit-mysql-node.private_ip}/g' /var/www/snipeit/.env > ~/.env",
    "sudo cp /home/ubuntu/.env /var/www/snipeit/.env",
-   "echo 'Por fin!!!!'",
    "sudo chown -R www-data:www-data /var/www/snipeit"
    ]
   connection {
