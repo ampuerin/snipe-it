@@ -33,12 +33,7 @@ resource "aws_security_group" "web-nodes" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
-data "aws_security_group" "idgrupoweb" {
-  id = "${aws_security_group.web-nodes.id}"
-}
-data "aws_security_group" "idgrupodb" {
-  id = "${aws_security_group.mysql-node.id}"
-}
+
 resource "aws_security_group" "mysql-node" {
   name = "mysql-node"
   description = "mysqldb Security Group"
@@ -60,8 +55,8 @@ resource "aws_security_group_rule" "mysqlwall" {
   from_port         = 3306
   to_port           = 3306
   protocol          = "tcp"
-  security_group_id = "${data.aws_security_group.idgrupodb.id}"
-  source_security_group_id = "${data.aws_security_group.idgrupoweb.id}"
+  security_group_id = "${aws_security_group.mysql-node.id}"
+  source_security_group_id = "${aws_security_group.web-nodes.id}"
 }
 
 data "aws_ami" "latest-mysql" {
