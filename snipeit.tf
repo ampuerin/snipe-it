@@ -1,4 +1,4 @@
-variable "ampuopskey" {}
+variable "aws_ssh_key" {}
 
 provider "aws" {
   region = "eu-central-1"
@@ -111,7 +111,7 @@ resource "aws_instance" "snipeit-web-node" {
     host		= "${aws_instance.snipeit-web-node.public_dns}"
     type        = "ssh"
     user        = "ubuntu"
-    private_key = "${var.ampuopskey}"
+    private_key = "${var.aws_ssh_key}"
   }
  }
 }
