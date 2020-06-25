@@ -8,8 +8,8 @@ pipeline {
     stage('Validate Packer AMI') {
         steps {
             sh '''
-				export AWS_KEY=$(vault kv get -field=ampuops aws/access_key)
-			    export AWS_SECRET=$(vault kv get -field=ampuops aws/secret_key)
+				export aws_access_key=$(vault kv get -field=ampuops aws/access_key)
+			    export aws_secret_key=$(vault kv get -field=ampuops aws/secret_key)
 				export mysqlpassword=$(vault kv get -field=dbkey snipeit/mysql)
 				export appkey=$(vault kv get -field=appkey snipeit/app)
 				packer validate snipeitweb.json
@@ -20,8 +20,8 @@ pipeline {
     stage('Create Packer AMI') {
         steps {
             sh '''
-				export AWS_KEY=$(vault kv get -field=ampuops aws/access_key)
-			    export AWS_SECRET=$(vault kv get -field=ampuops aws/secret_key)
+				export aws_access_key=$(vault kv get -field=ampuops aws/access_key)
+			    export aws_secret_key=$(vault kv get -field=ampuops aws/secret_key)
 				export mysqlpassword=$(vault kv get -field=dbkey snipeit/mysql)
 				export appkey=$(vault kv get -field=appkey snipeit/app)
 				packer build snipeitweb.json
@@ -32,10 +32,10 @@ pipeline {
     stage('AWS Deployment') {
       steps {
             sh '''
-               export AWS_KEY=$(vault kv get -field=ampuops aws/access_key)
-			   export AWS_SECRET=$(vault kv get -field=ampuops aws/secret_key)
+			   export aws_access_key=$(vault kv get -field=ampuops aws/access_key)
+			   export aws_secret_key=$(vault kv get -field=ampuops aws/secret_key)
 			   terraform init
-               terraform apply -auto-approve -var access_key=$AWS_KEY -var secret_key=$AWS_SECRET
+               terraform apply -auto-approve -var access_key=$aws_access_key -var secret_key=$aws_secret_key
             '''
         }      
     }
