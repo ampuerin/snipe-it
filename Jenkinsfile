@@ -49,7 +49,22 @@ pipeline {
 				'''
         }
     }
-    stage('Deployment in AWS Cloud') {
+    stage('Infrastructure plan with Terraform') {
+      steps{ 
+	  withCredentials([sshUserPrivateKey(credentialsId: "2b5c9bb1-79fc-4bca-9de8-7f268e2fa1fa", keyFileVariable: 'aws_ssh_key')])
+	  {
+            sh '''
+			   export AWS_ACCESS_KEY_ID=$(vault kv get -field=ampuops aws/access_key)
+			   export AWS_SECRET_ACCESS_KEY=$(vault kv get -field=ampuops aws/secret_key)
+			   cat ${aws_ssh_key} > ampuops.pem
+			   terraform init
+			   terraform plan
+               terraform apply -auto-approve
+            '''
+        }      
+    }
+	}
+	stage('Deployment in AWS Cloud') {
       steps{ 
 	  withCredentials([sshUserPrivateKey(credentialsId: "2b5c9bb1-79fc-4bca-9de8-7f268e2fa1fa", keyFileVariable: 'aws_ssh_key')])
 	  {
