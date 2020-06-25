@@ -8,6 +8,10 @@ pipeline {
     stage('Validate Packer AMI') {
         steps {
             sh '''
+				export AWS_KEY=$(vault kv get -field=ampuops aws/access_key)
+			    export AWS_SECRET=$(vault kv get -field=ampuops aws/secret_key)
+				export mysqlpassword=$(vault kv get -field=dbkey snipeit/mysql)
+				export appkey=$(vault kv get -field=appkey snipeit/app)
 				packer validate snipeitweb.json
 				packer validate snipeitdb.json
 				'''
@@ -16,6 +20,10 @@ pipeline {
     stage('Create Packer AMI') {
         steps {
             sh '''
+				export AWS_KEY=$(vault kv get -field=ampuops aws/access_key)
+			    export AWS_SECRET=$(vault kv get -field=ampuops aws/secret_key)
+				export mysqlpassword=$(vault kv get -field=dbkey snipeit/mysql)
+				export appkey=$(vault kv get -field=appkey snipeit/app)
 				packer build snipeitweb.json
 				packer build snipeitdb.json
 				'''
