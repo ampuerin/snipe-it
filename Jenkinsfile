@@ -52,6 +52,7 @@ pipeline {
             sh '''
 			   export AWS_ACCESS_KEY_ID=$(vault kv get -field=ampuops aws/access_key)
 			   export AWS_SECRET_ACCESS_KEY=$(vault kv get -field=ampuops aws/secret_key)
+			   export ampuopskey=$(vault kv get -field=ampuops aws/ampuopskey)
 			   terraform init
                terraform apply -auto-approve
             '''

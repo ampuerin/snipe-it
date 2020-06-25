@@ -1,5 +1,7 @@
+variable "ampuopskey" {}
+
 provider "aws" {
-  region     = "eu-central-1"
+  region = "eu-central-1"
 }
 
 terraform {
@@ -10,6 +12,7 @@ terraform {
   region = "eu-central-1"
  }
 }
+
 resource "aws_security_group" "web-nodes" {
   name = "web-nodes"
   description = "Web Security Group"
@@ -108,7 +111,7 @@ resource "aws_instance" "snipeit-web-node" {
     host		= "${aws_instance.snipeit-web-node.public_dns}"
     type        = "ssh"
     user        = "ubuntu"
-    private_key = "${file("/home/ubuntu/keys/ampuops.pem")}"
+    private_key = "${var.ampuopskey}"
   }
  }
 }
