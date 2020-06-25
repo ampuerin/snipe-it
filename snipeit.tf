@@ -59,7 +59,7 @@ resource "aws_security_group_rule" "mysqlwall" {
   to_port           = 3306
   protocol          = "tcp"
   security_group_id = "${aws_security_group.mysql-node.id}"
-  source_security_group_id = "${data.aws_security_group.idgrupoweb.vpc_id}"
+  source_security_group_id = "${data.aws_security_group.idgrupoweb}"
 }
 
 data "aws_ami" "latest-mysql" {
