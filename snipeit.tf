@@ -1,6 +1,12 @@
+variable "access_key" {}
+variable "secret_key" {}
+
 provider "aws" {
-  region = "eu-central-1"
+  access_key = "${var.access_key}"
+  secret_key = "${var.secret_key}"
+  region     = "eu-central-1"
 }
+
 terraform {
  backend "s3" {
   bucket = "terraform-jenkins-dev"

@@ -29,6 +29,8 @@
   "builders": [
   {
   "type": "amazon-ebs",
+  "access_key": "{{user `AWS_KEY`}}",
+  "secret_key": "{{user `AWS_SECRET`}}",
   "iam_instance_profile": "packer_s3",
   "region": "eu-central-1",
   "source_ami": "ami-0b6f46ba4d94838a0",
