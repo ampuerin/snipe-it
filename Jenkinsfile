@@ -17,6 +17,7 @@ pipeline {
         }
     }
     stage('Create web-node Packer AMI') {
+		when { branch "feature/*" }
         steps {
             sh '''
 				export aws_access_key=$(vault kv get -field=ampuops aws/access_key)
@@ -38,6 +39,7 @@ pipeline {
         }
     }
     stage('Create database node Packer AMI') {
+		when { branch "feature/*" }
         steps {
             sh '''
 				export aws_access_key=$(vault kv get -field=ampuops aws/access_key)
