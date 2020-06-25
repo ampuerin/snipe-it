@@ -5,48 +5,48 @@ pipeline {
         VAULT_TOKEN = "s.6EXFh9aVAbR3ItgoPBqvhMbS"
     }
   stages {
-    stage('Validate web-node Packer AMI') {
-        steps {
-            sh '''
-				export aws_access_key=$(vault kv get -field=ampuops aws/access_key)
-			    export aws_secret_key=$(vault kv get -field=ampuops aws/secret_key)
-				export mysqlpassword=$(vault kv get -field=dbkey snipeit/mysql)
-				export appkey=$(vault kv get -field=appkey snipeit/app)
-				packer validate snipeitweb.json
-				'''
-        }
-    }
-    stage('Create web-node Packer AMI') {
-        steps {
-            sh '''
-				export aws_access_key=$(vault kv get -field=ampuops aws/access_key)
-			    export aws_secret_key=$(vault kv get -field=ampuops aws/secret_key)
-				export mysqlpassword=$(vault kv get -field=dbkey snipeit/mysql)
-				export appkey=$(vault kv get -field=appkey snipeit/app)
-				packer build -var aws_access_key=$aws_access_key -var aws_secret_key=$aws_secret_key -var mysqlpassword=$mysqlpassword -var appkey=$appkey snipeitweb.json 
-				'''
-        }
-    }
-	stage('Validate database node Packer AMI') {
-        steps {
-            sh '''
-				export aws_access_key=$(vault kv get -field=ampuops aws/access_key)
-			    export aws_secret_key=$(vault kv get -field=ampuops aws/secret_key)
-				export mysqlpassword=$(vault kv get -field=dbkey snipeit/mysql)
-				packer validate snipeitdb.json
-				'''
-        }
-    }
-    stage('Create database node Packer AMI') {
-        steps {
-            sh '''
-				export aws_access_key=$(vault kv get -field=ampuops aws/access_key)
-			    export aws_secret_key=$(vault kv get -field=ampuops aws/secret_key)
-				export mysqlpassword=$(vault kv get -field=dbkey snipeit/mysql)
-				packer build -var aws_access_key=$aws_access_key -var aws_secret_key=$aws_secret_key -var mysqlpassword=$mysqlpassword snipeitdb.json 
-				'''
-        }
-    }
+    //stage('Validate web-node Packer AMI') {
+    //    steps {
+    //        sh '''
+	//			export aws_access_key=$(vault kv get -field=ampuops aws/access_key)
+	//		    export aws_secret_key=$(vault kv get -field=ampuops aws/secret_key)
+	//			export mysqlpassword=$(vault kv get -field=dbkey snipeit/mysql)
+	//			export appkey=$(vault kv get -field=appkey snipeit/app)
+	//			packer validate snipeitweb.json
+	//			'''
+    //    }
+    //}
+    //stage('Create web-node Packer AMI') {
+    //    steps {
+    //        sh '''
+	//			export aws_access_key=$(vault kv get -field=ampuops aws/access_key)
+	//		    export aws_secret_key=$(vault kv get -field=ampuops aws/secret_key)
+	//			export mysqlpassword=$(vault kv get -field=dbkey snipeit/mysql)
+	//			export appkey=$(vault kv get -field=appkey snipeit/app)
+	//			packer build -var aws_access_key=$aws_access_key -var aws_secret_key=$aws_secret_key -var mysqlpassword=$mysqlpassword -var appkey=$appkey snipeitweb.json 
+	//			'''
+    //    }
+    //}
+	//stage('Validate database node Packer AMI') {
+    //    steps {
+    //        sh '''
+	//			export aws_access_key=$(vault kv get -field=ampuops aws/access_key)
+	//		    export aws_secret_key=$(vault kv get -field=ampuops aws/secret_key)
+	//			export mysqlpassword=$(vault kv get -field=dbkey snipeit/mysql)
+	//			packer validate snipeitdb.json
+	//			'''
+    //    }
+    //}
+    //stage('Create database node Packer AMI') {
+    //    steps {
+    //        sh '''
+	//			export aws_access_key=$(vault kv get -field=ampuops aws/access_key)
+	//		    export aws_secret_key=$(vault kv get -field=ampuops aws/secret_key)
+	//			export mysqlpassword=$(vault kv get -field=dbkey snipeit/mysql)
+	//			packer build -var aws_access_key=$aws_access_key -var aws_secret_key=$aws_secret_key -var mysqlpassword=$mysqlpassword snipeitdb.json 
+	//			'''
+    //    }
+    //}
     stage('Deployment in AWS Cloud') {
       steps {
             sh '''
