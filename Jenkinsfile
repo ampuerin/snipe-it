@@ -5,6 +5,14 @@ pipeline {
         VAULT_TOKEN = "s.6EXFh9aVAbR3ItgoPBqvhMbS"
     }
   stages {
+    stage('Validate Packer AMI') {
+        steps {
+            sh '''
+				packer validate snipeitweb.json
+				packer validate snipeitdb.json
+				'''
+        }
+    }
     stage('Create Packer AMI') {
         steps {
             sh '''
