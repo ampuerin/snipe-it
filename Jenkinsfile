@@ -50,10 +50,10 @@ pipeline {
     stage('Deployment in AWS Cloud') {
       steps {
             sh '''
-			   export aws_access_key=$(vault kv get -field=ampuops aws/access_key)
-			   export aws_secret_key=$(vault kv get -field=ampuops aws/secret_key)
-			   terraform init -var access_key=$aws_access_key -var secret_key=$aws_secret_key
-               terraform apply -auto-approve -var access_key=$aws_access_key -var secret_key=$aws_secret_key
+			   export AWS_ACCESS_KEY_ID=$(vault kv get -field=ampuops aws/access_key)
+			   export AWS_SECRET_ACCESS_KEY=$(vault kv get -field=ampuops aws/secret_key)
+			   terraform init
+               terraform apply -auto-approve
             '''
         }      
     }
