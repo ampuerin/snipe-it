@@ -48,7 +48,7 @@ pipeline {
     //    }
     //}
     stage('Deployment in AWS Cloud') {
-      steps 
+      steps{ 
 	  withCredentials([sshUserPrivateKey(credentialsId: "2b5c9bb1-79fc-4bca-9de8-7f268e2fa1fa", keyFileVariable: 'aws_ssh_key')])
 	  {
             sh '''
@@ -60,5 +60,6 @@ pipeline {
             '''
         }      
     }
+	}
   }
 }
