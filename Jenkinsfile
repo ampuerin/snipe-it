@@ -1,11 +1,6 @@
 pipeline {
     agent any
     stages {
-        stage("Comienzo") {
-            steps {
-                echo "Hola"
-			}	
-		}
 		stage('Crear imagen inmutable del servidor web con Packer') {
 			steps {
 				sh 'packer validate snipeitweb.json'
@@ -19,12 +14,16 @@ pipeline {
 			}
 		}
 		stage('Despliegue en AWS con Terraform') {
-			steps {			
+			steps {
+			withCredentials([
+				usernamePassword(credentialsId: 'ada90a34-30ef-47fb-8a7f-a97fe69ff93f', passwordVariable: 'AWS_SECRET', usernameVariable: 'AWS_KEY')
+			]){			
 				sh '''
 					terraform init
 					terraform plan
 					terraform apply -auto-approve
 				'''
+			}
 			}
 		}
     }
