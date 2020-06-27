@@ -5,7 +5,7 @@ pipeline {
         VAULT_TOKEN = "s.6EXFh9aVAbR3ItgoPBqvhMbS"
     }
   stages {
-    stage('Validate web-node Packer AMI') {
+    stage('Validar imagen packer del servidor web') {
         steps {
             sh '''
 				export aws_access_key=$(vault kv get -field=ampuops aws/access_key)
@@ -16,7 +16,7 @@ pipeline {
 				'''
         }
     }
-    stage('Create web-node Packer AMI') {
+    stage('Crear imagen packer del servidor web en AWS') {
 		when { branch "feature/ampueroweb" }
         steps {
             sh '''
@@ -28,7 +28,7 @@ pipeline {
 				'''
         }
     }
-	stage('Validate database node Packer AMI') {
+	stage('Validar imagen packer del servidor de base de datos') {
         steps {
             sh '''
 				export aws_access_key=$(vault kv get -field=ampuops aws/access_key)
@@ -38,7 +38,7 @@ pipeline {
 				'''
         }
     }
-    stage('Create database node Packer AMI') {
+    stage('Crear imagen packer del servidor de base de datos en AWS') {
 		when { branch "feature/ampuerodb" }
         steps {
             sh '''
@@ -49,7 +49,7 @@ pipeline {
 				'''
         }
     }
-    stage('Infrastructure plan with Terraform') {
+    stage('Ejecutar plan de infraestructura de Terraform') {
       steps{ 
 	  withCredentials([sshUserPrivateKey(credentialsId: "2b5c9bb1-79fc-4bca-9de8-7f268e2fa1fa", keyFileVariable: 'aws_ssh_key')])
 	  {
@@ -64,7 +64,7 @@ pipeline {
         }      
     }
 	}
-	stage('Deployment in AWS Cloud with Terraform') {
+	stage('Despliegue en AWS del plan de Terraform') {
       steps{ 
 	  withCredentials([sshUserPrivateKey(credentialsId: "2b5c9bb1-79fc-4bca-9de8-7f268e2fa1fa", keyFileVariable: 'aws_ssh_key')])
 	  {
@@ -79,7 +79,7 @@ pipeline {
         }      
     }
 	}
-	stage('Destroy all AWS resources') {
+	stage('Destruir todos los recursos de Terraform') {
 	  when { branch "feature/destroy" }
       steps{ 
 	  withCredentials([sshUserPrivateKey(credentialsId: "2b5c9bb1-79fc-4bca-9de8-7f268e2fa1fa", keyFileVariable: 'aws_ssh_key')])
