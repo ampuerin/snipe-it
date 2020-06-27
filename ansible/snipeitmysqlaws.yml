@@ -1,0 +1,72 @@
+---
+# Libro de jugadas de Ansible para instalación del servidor de base de datos Snipe-IT en una máquina EC2 en AWS
+- name: "snipeitdb"
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: Instalar paquete zip necesario para gestionar las copias de seguridad de Snipe-IT
+    apt:
+      name: zip 
+      state: present
+      
+  - name: Instalar aws cli necesario para interactuar con los recursos de AWS
+    apt:
+      name: awscli 
+      state: present
+
+  - name: Traer la copia de seguridad de Snipe-IT desde Amazon S3
+    command: aws s3 cp s3://terraform-jenkins-dev/snipeit/snipeit.zip /home/ubuntu/snipeit.zip
+    args:
+      creates: /home/ubuntu/snipeit.zip  
+      
+  - name: Instalar motor de base de datos
+    apt:
+      name: mysql-server    
+      state: present
+  
+  - name: Instalar paquete python-mysqldb para interactuar a través de Ansible con el motor de base de datos
+    apt:
+      package: python-mysqldb
+      state: present 
+
+  - name: Crear la base de datos snipeit y registramos este paso para saber si es la primera vez que se realiza
+    mysql_db: 
+      name: snipeit 
+      state: present
+    register: fresh
+
+  - name: Crear el usuario de la base de datos y la clave que será incorporada mediante variable de entorno
+    mysql_user:
+      name: snipe_user
+      password: "{{ mysqlpassword }}"
+      priv: 'snipeit.*:ALL'
+      host: '%'
+      state: present
+
+  - name: Extraer la copia de seguridad de Snipe-IT
+    unarchive:
+      src: /home/ubuntu/snipeit.zip
+      dest: /
+
+  - name: Importar el esquema de la base de datos extraido de la copia de seguridad en la base de datos creada anteriormente
+    mysql_db:
+      name: snipeit
+      state: import
+      target: /db-dumps/mysql-snipeit.sql
+      
+  - name: Cambiar la configuración del motor de base de datos para que acepte conexiones fuera del servidor
+    lineinfile:
+      path: /etc/mysql/mysql.conf.d/mysqld.cnf
+      regexp: '127\.0\.0\.1'
+      line: bind-address = 0.0.0.0
+    when: fresh.changed
+
+  - name: Reiniciar el servicio del motor de base de datos
+    service:
+      name: mysql
+      state: restarted
+
+  - name: Mostramos la contraseña que se ha introducido en la variable de entorno. Esto no debe hacerse en entornos de producción
+    debug:
+      msg: "La contraseña de la base de datos es {{ mysqlpassword }}"
