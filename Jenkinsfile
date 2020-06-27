@@ -51,7 +51,7 @@ pipeline {
     }
     stage('Ejecutar plan de infraestructura de Terraform') {
       steps{ 
-	  withCredentials([sshUserPrivateKey(credentialsId: "aws-credenciales-ssh-opsa", keyFileVariable: 'aws_ssh_key')])
+	  withCredentials([sshUserPrivateKey(credentialsId: "aws-credenciales-ssh-ops", keyFileVariable: 'aws_ssh_key')])
 	  {
             sh '''
 			   export AWS_ACCESS_KEY_ID=$(vault kv get -field=ampuops aws/access_key)
@@ -66,7 +66,7 @@ pipeline {
 	}
 	stage('Despliegue en AWS del plan de Terraform') {
       steps{ 
-	  withCredentials([sshUserPrivateKey(credentialsId: "aws-credenciales-ssh-opsa", keyFileVariable: 'aws_ssh_key')])
+	  withCredentials([sshUserPrivateKey(credentialsId: "aws-credenciales-ssh-ops", keyFileVariable: 'aws_ssh_key')])
 	  {
             sh '''
 			   export AWS_ACCESS_KEY_ID=$(vault kv get -field=ampuops aws/access_key)
@@ -82,7 +82,7 @@ pipeline {
 	stage('Destruir todos los recursos de Terraform') {
 	  when { branch "feature/destroy" }
       steps{ 
-	  withCredentials([sshUserPrivateKey(credentialsId: "aws-credenciales-ssh-opsa", keyFileVariable: 'aws_ssh_key')])
+	  withCredentials([sshUserPrivateKey(credentialsId: "aws-credenciales-ssh-ops", keyFileVariable: 'aws_ssh_key')])
 	  {
             sh '''
 			   export AWS_ACCESS_KEY_ID=$(vault kv get -field=ampuops aws/access_key)
