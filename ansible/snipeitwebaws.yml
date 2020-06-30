@@ -150,7 +150,7 @@
       name: nginx
       state: restarted
       
-  - name: Ensure a job that runs at 2 and 5 exists. Creates an entry like "0 5,2 * * ls -alh > /dev/null"
+  - name: Crear un job en root que ejecute la copia de la aplicación y la suba a Amazon S3
     cron:
       name: "backup snipeit en S3"
       minute: "0"
