@@ -1,7 +1,9 @@
 pipeline {
   agent any
-      environment {		
+      environment {
+		withCredentials([string(credentialsId: 'vaultlogin', variable: 'vault_token')])	  
         VAULT_ADDR = "http://127.0.0.1:8200"
+		VAULT_TOKEN = ${vault_token}
     }
   stages {
     stage('Validar imagen packer del servidor web') {
@@ -25,7 +27,7 @@ pipeline {
 		withCredentials([string(credentialsId: 'vaultlogin', variable: 'vault_token')])
 		{
             sh '''
-				export VAULT_TOKEN = ${vault_token}
+				VAULT_TOKEN = ${vault_token}
 				export aws_access_key=$(vault kv get -field=ampuops aws/access_key)
 			    export aws_secret_key=$(vault kv get -field=ampuops aws/secret_key)
 				export mysqlpassword=$(vault kv get -field=dbkey snipeit/mysql)
