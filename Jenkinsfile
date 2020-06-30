@@ -66,8 +66,9 @@ pipeline {
     }
     stage('Ejecutar plan de infraestructura de Terraform') {
       steps{ 
-	  withCredentials([sshUserPrivateKey(credentialsId: "ec2key", keyFileVariable: 'aws_ssh_key')])
-	  withCredentials([string(credentialsId: 'vaultlogin', variable: 'vault_token')])
+	  withCredentials([
+	  sshUserPrivateKey(credentialsId: "ec2key", keyFileVariable: 'aws_ssh_key'),
+	  string(credentialsId: 'vaultlogin', variable: 'vault_token')])
 	  {
             sh '''
 			   export VAULT_TOKEN=${vault_token}
@@ -83,8 +84,9 @@ pipeline {
 	}
 	stage('Despliegue en AWS del plan de Terraform') {
       steps{ 
-	  withCredentials([sshUserPrivateKey(credentialsId: "ec2key", keyFileVariable: 'aws_ssh_key')])
-	  withCredentials([string(credentialsId: 'vaultlogin', variable: 'vault_token')])
+	  withCredentials([
+	  sshUserPrivateKey(credentialsId: "ec2key", keyFileVariable: 'aws_ssh_key'),
+	  string(credentialsId: 'vaultlogin', variable: 'vault_token')])
 	  {
             sh '''
 			   export VAULT_TOKEN=${vault_token}
@@ -101,8 +103,9 @@ pipeline {
 	stage('Destruir todos los recursos de Terraform') {
 	  when { branch "feature/destroy" }
       steps{ 
-	  withCredentials([sshUserPrivateKey(credentialsId: "ec2key", keyFileVariable: 'aws_ssh_key')])
-	  withCredentials([string(credentialsId: 'vaultlogin', variable: 'vault_token')])
+	  withCredentials([
+	  sshUserPrivateKey(credentialsId: "ec2key", keyFileVariable: 'aws_ssh_key'),
+	  string(credentialsId: 'vaultlogin', variable: 'vault_token')])
 	  {
             sh '''
 			   export VAULT_TOKEN=${vault_token}
