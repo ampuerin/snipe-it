@@ -26,7 +26,7 @@
       creates: /home/ubuntu/.envsite
       
   - name: Traemos el fichero de configuración del servidor web desde Amazon S3
-    command: aws s3 cp s3://terraform-jenkins-dev/snipeit/snipeit.zip /home/ubuntu/site.conf 
+    command: aws s3 cp s3://terraform-jenkins-dev/snipeit/site.conf /home/ubuntu/site.conf 
     args:
       creates: /home/ubuntu/site.conf   
 

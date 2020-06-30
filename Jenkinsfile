@@ -20,7 +20,7 @@ pipeline {
 		}
     }
     stage('Crear imagen packer del servidor web en AWS') {
-		when { branch "feature/web" }
+		when { branch "ampuero" }
         steps {
 		withCredentials([string(credentialsId: 'vaultlogin', variable: 'vault_token')])
 		{
