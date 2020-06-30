@@ -97,7 +97,7 @@ pipeline {
 			   terraform plan
                terraform apply -auto-approve
 			   export urluptime=$(terraform output dominio)
-			   curl -X POST -H "Cache-Control: no-cache" -H "Content-Type: application/x-www-form-urlencoded" -d 'api_key="${tokenrobot}"&format=json&type=1&url=http://"${urluptime}"&friendly_name=Snipe-IT' "https://api.uptimerobot.com/v2/newMonitor" 
+			   curl -X POST -H "Cache-Control: no-cache" -H "Content-Type: application/x-www-form-urlencoded" -d 'api_key=\${tokenrobot}&format=json&type=1&url=http://\${urluptime}&friendly_name=Snipe-IT' "https://api.uptimerobot.com/v2/newMonitor" 
             '''
         }      
     }
