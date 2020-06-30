@@ -150,6 +150,13 @@
       name: nginx
       state: restarted
       
+  - name: Ensure a job that runs at 2 and 5 exists. Creates an entry like "0 5,2 * * ls -alh > /dev/null"
+    cron:
+      name: "backup snipeit en S3"
+      minute: "0"
+      hour: "2"
+      job: "cd /var/www/snipeit/ && php artisan snipeit:backup -n && aws s3 cp /var/www/snipeit/storage/app/backups/snipe* s3://terraform-jenkins-dev/snipeit/ && rm /var/www/snipeit/storage/app/backups/snipe*"
+      
   - name: Mostrar 
     debug:
       msg: "La clave de encriptación es base64:{{ appkey }} y la contraseña de la base de datos es {{ mysqlpassword }}"
