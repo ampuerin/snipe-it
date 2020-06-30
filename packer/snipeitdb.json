@@ -15,7 +15,7 @@
     },
     {
       "type": "ansible-local",
-      "playbook_file": "./../ansible/snipeitmysqlaws.yml",
+      "playbook_file": "ansible/snipeitmysqlaws.yml",
 	  "extra_arguments": [ "--extra-vars \"mysqlpassword={{user `mysqlpassword`}}\"" ]
     }
   ],
