@@ -9,7 +9,7 @@ pipeline {
 		withCredentials([string(credentialsId: 'vaultlogin', variable: 'vault_token')])
 		{
             sh '''
-				export VAULT_TOKEN = ${vault_token}
+				vault login ${vault_token}
 				export aws_access_key=$(vault kv get -field=ampuops aws/access_key)
 			    export aws_secret_key=$(vault kv get -field=ampuops aws/secret_key)
 				export mysqlpassword=$(vault kv get -field=dbkey snipeit/mysql)
