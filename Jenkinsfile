@@ -20,7 +20,7 @@ pipeline {
 		}
     }
     stage('Crear imagen packer del servidor web en AWS') {
-		when { branch "ampuero" }
+		when { branch "feature/web" }
         steps {
 		withCredentials([string(credentialsId: 'vaultlogin', variable: 'vault_token')])
 		{
@@ -50,7 +50,7 @@ pipeline {
 		}
     }
     stage('Crear imagen packer del servidor de base de datos en AWS') {
-		when { branch "ampuero" }
+		when { branch "feature/database" }
         steps {
 		withCredentials([string(credentialsId: 'vaultlogin', variable: 'vault_token')])
 		{
@@ -77,7 +77,6 @@ pipeline {
 			   cat ${aws_ssh_key} > ampuops.pem
 			   terraform init
 			   terraform plan
-               terraform apply -auto-approve
             '''
         }      
     }
@@ -98,7 +97,8 @@ pipeline {
 			   terraform plan
                terraform apply -auto-approve
 			   export urluptime=$(terraform output dominio)
-			   curl -X POST -H "Cache-Control: no-cache" -H "Content-Type: application/x-www-form-urlencoded" -d 'api_key=${tokenrobot}&format=json&type=1&url=http://${urluptime}&friendly_name=Hello World' "https://api.uptimerobot.com/v2/newMonitor" 
+			   export robotoken=${tokenrobot}
+			   curl -X POST -H "Cache-Control: no-cache" -H "Content-Type: application/x-www-form-urlencoded" -d 'api_key=${robotoken}&format=json&type=1&url=http://${urluptime}&friendly_name=Snipe-IT' "https://api.uptimerobot.com/v2/newMonitor" 
             '''
         }      
     }
