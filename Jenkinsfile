@@ -1,8 +1,9 @@
 pipeline {
   agent any
       environment {
+		withCredentials([string(credentialsId: 'vaultlogin', variable: 'vault_token')])
         VAULT_ADDR = "http://127.0.0.1:8200"
-        VAULT_TOKEN = "s.6EXFh9aVAbR3ItgoPBqvhMbS"
+        VAULT_TOKEN = ${vault_token}
     }
   stages {
     stage('Validar imagen packer del servidor web') {
@@ -17,7 +18,7 @@ pipeline {
         }
     }
     stage('Crear imagen packer del servidor web en AWS') {
-		when { branch "feature/ampueroweb" }
+		when { branch "ampuero" }
         steps {
             sh '''
 				export aws_access_key=$(vault kv get -field=ampuops aws/access_key)
@@ -39,7 +40,7 @@ pipeline {
         }
     }
     stage('Crear imagen packer del servidor de base de datos en AWS') {
-		when { branch "feature/ampuerodb" }
+		when { branch "ampuero" }
         steps {
             sh '''
 				export aws_access_key=$(vault kv get -field=ampuops aws/access_key)
