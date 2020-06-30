@@ -50,7 +50,7 @@ pipeline {
 		}
     }
     stage('Crear imagen packer del servidor de base de datos en AWS') {
-		when { branch "feature/db" }
+		when { branch "ampuero" }
         steps {
 		withCredentials([string(credentialsId: 'vaultlogin', variable: 'vault_token')])
 		{
@@ -86,7 +86,8 @@ pipeline {
       steps{ 
 	  withCredentials([
 	  sshUserPrivateKey(credentialsId: "ec2key", keyFileVariable: 'aws_ssh_key'),
-	  string(credentialsId: 'vaultlogin', variable: 'vault_token')])
+	  string(credentialsId: 'vaultlogin', variable: 'vault_token'),
+	  string(credentialsId: 'uptimerobot', variable: 'tokenrobot')])
 	  {
             sh '''
 			   export VAULT_TOKEN=${vault_token}
@@ -96,6 +97,8 @@ pipeline {
 			   terraform init
 			   terraform plan
                terraform apply -auto-approve
+			   export urluptime=$(terraform output dominio)
+			   curl -X POST -H "Cache-Control: no-cache" -H "Content-Type: application/x-www-form-urlencoded" -d 'api_key=${tokenrobot}&format=json&type=1&url=http://${urluptime}&friendly_name=Hello World' "https://api.uptimerobot.com/v2/newMonitor" 
             '''
         }      
     }

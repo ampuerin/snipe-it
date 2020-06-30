@@ -115,3 +115,7 @@ resource "aws_instance" "snipeit-web-node" {
   }
  }
 }
+
+output "dominio" {
+  value = "${aws_instance.snipeit-web-node.public_dns}"
+}
