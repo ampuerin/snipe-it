@@ -1,9 +1,7 @@
 pipeline {
   agent any
       environment {
-		withCredentials([string(credentialsId: 'vaultlogin', variable: 'vault_token')])	  
         VAULT_ADDR = "http://127.0.0.1:8200"
-		VAULT_TOKEN = ${vault_token}
     }
   stages {
     stage('Validar imagen packer del servidor web') {
@@ -11,7 +9,7 @@ pipeline {
 		withCredentials([string(credentialsId: 'vaultlogin', variable: 'vault_token')])
 		{
             sh '''
-				vault login ${vault_token}
+				export VAULT_TOKEN=${vault_token}
 				export aws_access_key=$(vault kv get -field=ampuops aws/access_key)
 			    export aws_secret_key=$(vault kv get -field=ampuops aws/secret_key)
 				export mysqlpassword=$(vault kv get -field=dbkey snipeit/mysql)
@@ -27,7 +25,7 @@ pipeline {
 		withCredentials([string(credentialsId: 'vaultlogin', variable: 'vault_token')])
 		{
             sh '''
-				VAULT_TOKEN = ${vault_token}
+				export VAULT_TOKEN=${vault_token}
 				export aws_access_key=$(vault kv get -field=ampuops aws/access_key)
 			    export aws_secret_key=$(vault kv get -field=ampuops aws/secret_key)
 				export mysqlpassword=$(vault kv get -field=dbkey snipeit/mysql)
@@ -42,7 +40,7 @@ pipeline {
 		withCredentials([string(credentialsId: 'vaultlogin', variable: 'vault_token')])
         {
 			sh '''
-				export VAULT_TOKEN = ${vault_token}
+				export VAULT_TOKEN=${vault_token}
 				export aws_access_key=$(vault kv get -field=ampuops aws/access_key)
 			    export aws_secret_key=$(vault kv get -field=ampuops aws/secret_key)
 				export mysqlpassword=$(vault kv get -field=dbkey snipeit/mysql)
@@ -57,7 +55,7 @@ pipeline {
 		withCredentials([string(credentialsId: 'vaultlogin', variable: 'vault_token')])
 		{
             sh '''
-				export VAULT_TOKEN = ${vault_token}
+				export VAULT_TOKEN=${vault_token}
 				export aws_access_key=$(vault kv get -field=ampuops aws/access_key)
 			    export aws_secret_key=$(vault kv get -field=ampuops aws/secret_key)
 				export mysqlpassword=$(vault kv get -field=dbkey snipeit/mysql)
@@ -72,7 +70,7 @@ pipeline {
 	  withCredentials([string(credentialsId: 'vaultlogin', variable: 'vault_token')])
 	  {
             sh '''
-			   export VAULT_TOKEN = ${vault_token}
+			   export VAULT_TOKEN=${vault_token}
 			   export AWS_ACCESS_KEY_ID=$(vault kv get -field=ampuops aws/access_key)
 			   export AWS_SECRET_ACCESS_KEY=$(vault kv get -field=ampuops aws/secret_key)
 			   cat ${aws_ssh_key} > ampuops.pem
@@ -89,7 +87,7 @@ pipeline {
 	  withCredentials([string(credentialsId: 'vaultlogin', variable: 'vault_token')])
 	  {
             sh '''
-			   export VAULT_TOKEN = ${vault_token}
+			   export VAULT_TOKEN=${vault_token}
 			   export AWS_ACCESS_KEY_ID=$(vault kv get -field=ampuops aws/access_key)
 			   export AWS_SECRET_ACCESS_KEY=$(vault kv get -field=ampuops aws/secret_key)
 			   cat ${aws_ssh_key} > ampuops.pem
@@ -107,7 +105,7 @@ pipeline {
 	  withCredentials([string(credentialsId: 'vaultlogin', variable: 'vault_token')])
 	  {
             sh '''
-			   export VAULT_TOKEN = ${vault_token}
+			   export VAULT_TOKEN=${vault_token}
 			   export AWS_ACCESS_KEY_ID=$(vault kv get -field=ampuops aws/access_key)
 			   export AWS_SECRET_ACCESS_KEY=$(vault kv get -field=ampuops aws/secret_key)
 			   cat ${aws_ssh_key} > ampuops.pem
