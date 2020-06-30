@@ -98,7 +98,7 @@
     become: no
     become_user: ubuntu
     
-  - name: Mover directorio de Snipe-IT a la carpeta de servicio web cuando no existe el fichero de entorno y registrar el estado de este paso como: fresh.
+  - name: Mover directorio de Snipe-IT a la carpeta de servicio web cuando no existe el fichero de entorno y registrar el estado de este paso como fresh.
     command: mv /home/ubuntu/snipeit /var/www/snipeit
     args:
       creates: /var/www/snipeit/.env
