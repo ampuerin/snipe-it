@@ -22,7 +22,7 @@
 	},
     {
       "type": "ansible-local",
-      "playbook_file": "ansible/snipeitwebaws.yml",
+      "playbook_file": "./../ansible/snipeitwebaws.yml",
 	  "extra_arguments": [ "--extra-vars \"appkey={{user `appkey`}} mysqlpassword={{user `mysqlpassword`}}\"" ]
     }
   ],
