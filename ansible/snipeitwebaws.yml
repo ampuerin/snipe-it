@@ -145,10 +145,10 @@
       recurse: yes
       owner: ubuntu
     
-#  - name: Reiniciar servidor web Nginx
-#    service:
-#      name: nginx
-#      state: restarted
+  - name: Reiniciar servidor web Nginx
+    service:
+      name: nginx
+      state: restarted
       
   - name: Mostrar 
     debug:
