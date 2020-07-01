@@ -106,7 +106,7 @@ resource "aws_instance" "snipeit-web-node" {
    "sed 's/localhost/${aws_instance.snipeit-mysql-node.private_ip}/g' /var/www/snipeit/.env > ~/.env",
    "sudo cp /home/ubuntu/.env /var/www/snipeit/.env",
    "sudo chown -R www-data:www-data /var/www/snipeit",
-   "cd /var/www/snipeit && sudo php artisan migrate -f -n"
+   "cd /var/www/snipeit && sudo php artisan migrate -force -n"
    ]
   connection {
     host		= "${aws_instance.snipeit-web-node.public_dns}"
