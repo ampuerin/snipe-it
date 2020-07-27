@@ -50,7 +50,7 @@ pipeline {
 		}
     }
     stage('Crear imagen packer del servidor de base de datos en AWS') {
-		when { branch "ampuero" }
+		when { branch "feature/deploydb" }
         steps {
 		withCredentials([string(credentialsId: 'vaultlogin', variable: 'vault_token')])
 		{
@@ -65,6 +65,7 @@ pipeline {
 		}
     }
     stage('Ejecutar plan de infraestructura de Terraform') {
+	  when { branch "ampuero" }
       steps{ 
 	  withCredentials([
 	  sshUserPrivateKey(credentialsId: "ec2key", keyFileVariable: 'aws_ssh_key'),
@@ -82,6 +83,7 @@ pipeline {
     }
 	}
 	stage('Despliegue en AWS del plan de Terraform') {
+	  when { branch "ampuero" }
       steps{ 
 	  withCredentials([
 	  sshUserPrivateKey(credentialsId: "ec2key", keyFileVariable: 'aws_ssh_key'),
