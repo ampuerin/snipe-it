@@ -36,6 +36,7 @@ pipeline {
 		}
     }
 	stage('Validar imagen packer del servidor de base de datos') {
+		when { branch "feature/deploydb" }
         steps {
 		withCredentials([string(credentialsId: 'vaultlogin', variable: 'vault_token')])
         {
